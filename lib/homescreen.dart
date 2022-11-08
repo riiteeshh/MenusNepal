@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:menunepal/newmenu.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,6 +10,37 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final searchfield = TextEditingController();
+  List<NewMenu> newmenu = [
+    NewMenu(
+        name: 'ChickenStation',
+        location: 'Kathmandu,Nepal',
+        fav: false,
+        logo:
+            'https://images.foodmandu.com//Images/Vendor/1277/OriginalSize/WhatsApp_Image_2021-12-06_at_12_061221064914.09.22.jpeg'),
+    NewMenu(
+        name: 'The Burger House And The Crunchy Corner',
+        location: 'Lalitpur,Nepal',
+        fav: false,
+        logo:
+            'https://media-cdn.tripadvisor.com/media/photo-s/11/44/e8/e9/the-burger-house-and.jpg'),
+    NewMenu(
+        name: 'KFC Nepal',
+        location: 'Thapathali,Nepal',
+        fav: false,
+        logo:
+            'https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png'),
+    NewMenu(
+        name: 'Michael Grills',
+        location: 'Mid-Baneshwor,Nepal',
+        fav: false,
+        logo: 'https://menu.nepvent.com/storage/logo/michaelgrills.jpg'),
+    NewMenu(
+        name: 'KKFC Nepal',
+        location: 'Sundhara,Nepal',
+        fav: false,
+        logo:
+            'https://play-lh.googleusercontent.com/hlx7U2aHkexuQbIV1Xz3en_bW-p3HLVnlDN8K7Anyfv9ZQhCC27EO8vaq04s_z-r6vxT'),
+  ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -66,9 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
             scrollDirection: Axis.vertical,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.565,
+              childAspectRatio: 0.545,
             ),
-            itemCount: 5,
+            itemCount: newmenu.length,
             itemBuilder: ((context, index) {
               return Container(
                 width: double.infinity,
@@ -80,27 +112,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: <Widget>[
                       Container(
-                        width: double.infinity,
-                        alignment: Alignment.topRight,
-                        margin: EdgeInsets.all(7),
-                        child: Icon(
-                          Icons.favorite_rounded,
-                          color: Colors.black.withOpacity(0.3),
-                        ),
-                      ),
+                          width: double.infinity,
+                          alignment: Alignment.topRight,
+                          margin: EdgeInsets.all(7),
+                          child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                print(newmenu[index].fav);
+                              });
+                            },
+                            icon: Icon(Icons.favorite_rounded),
+                            color: Colors.black.withOpacity(0.2),
+                          )),
                       Container(
                         margin: EdgeInsets.only(top: 5),
                         width: double.infinity,
                         alignment: Alignment.topCenter,
                         height: MediaQuery.of(context).size.height * 0.17,
-                        child: Image.network(
-                            'https://images.foodmandu.com//Images/Vendor/1277/OriginalSize/WhatsApp_Image_2021-12-06_at_12_061221064914.09.22.jpeg'),
+                        child: Image.network(newmenu[index].logo),
                       ),
                       Container(
-                        padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                        padding: EdgeInsets.only(top: 15, left: 10, right: 10),
                         width: double.infinity,
                         child: Text(
-                          'The Burger House And The Crunchy Corner',
+                          newmenu[index].name,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 18,
@@ -112,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: double.infinity,
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          'Kathmandu,Nepal',
+                          newmenu[index].location,
                           style: TextStyle(fontStyle: FontStyle.italic),
                           textAlign: TextAlign.center,
                         ),

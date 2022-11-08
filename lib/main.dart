@@ -37,6 +37,7 @@ class SplashScreen extends StatelessWidget {
       Navigator.pushReplacementNamed(context, '/tabbar');
     });
     return Scaffold(
+      backgroundColor: Colors.yellow.withOpacity(1),
       body: Center(child: Icon(Icons.menu_book)),
     );
   }
