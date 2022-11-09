@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       display_list = newmenu
           .where((element) =>
-              element.name!.toLowerCase().contains(value.toLowerCase()))
+              element.name.toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
   }

@@ -37,8 +37,12 @@ class SplashScreen extends StatelessWidget {
       Navigator.pushReplacementNamed(context, '/tabbar');
     });
     return Scaffold(
-      backgroundColor: Colors.yellow.withOpacity(1),
-      body: Center(child: Icon(Icons.menu_book)),
+      backgroundColor: Colors.white,
+      body: Center(
+          child: Container(
+              width: double.infinity,
+              height: 500,
+              child: Image.asset('asset/images/menusnepal-logo.png'))),
     );
   }
 }
