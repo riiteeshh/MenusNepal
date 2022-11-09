@@ -13,6 +13,8 @@ class AddMenu extends StatefulWidget {
 
 class _AddMenuState extends State<AddMenu> {
   final name = TextEditingController();
+  final address = TextEditingController();
+  final location = TextEditingController();
   File? image;
   Future pickimage(ImageSource source) async {
     try {
@@ -35,30 +37,57 @@ class _AddMenuState extends State<AddMenu> {
         body: Column(
           children: [
             Expanded(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: show,
-                  child: Container(
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    height: MediaQuery.of(context).size.height * 0.19,
-                    clipBehavior: Clip.hardEdge,
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(shape: BoxShape.rectangle),
-                    child: image != null
-                        ? Image.file(
-                            image!,
-                            fit: BoxFit.contain,
-                          )
-                        : Image.network(
-                            'https://images.cdn2.stockunlimited.net/preview1300/restaurant-logo-design_1797600.jpg',
-                          ),
+              child: Container(
+                width: 160,
+                child: Card(
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Column(
+                    children: <Widget>[
+                      InkWell(
+                        onTap: show,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 5),
+                          width: double.infinity,
+                          alignment: Alignment.topCenter,
+                          height: MediaQuery.of(context).size.height * 0.17,
+                          child: image != null
+                              ? Image.file(
+                                  image!,
+                                  fit: BoxFit.contain,
+                                )
+                              : Image.network(
+                                  'https://images.cdn2.stockunlimited.net/preview1300/restaurant-logo-design_1797600.jpg',
+                                ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(top: 0, left: 10, right: 10),
+                        width: double.infinity,
+                        child: Text(
+                          name.text,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'SecularOne',
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(5),
+                        child: Text(
+                          address.text,
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              ],
-            )),
+              ),
+            ),
             Expanded(
               flex: 2,
               child: Container(
@@ -89,6 +118,9 @@ class _AddMenuState extends State<AddMenu> {
                         keyboardType: TextInputType.multiline,
                         controller: name,
                         textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (value) => setState(() {
+                          name.text = value;
+                        }),
                         decoration: InputDecoration(
                             label: Text('Name of the Restaurant'),
                             alignLabelWithHint: true,
@@ -103,7 +135,10 @@ class _AddMenuState extends State<AddMenu> {
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
                         keyboardType: TextInputType.multiline,
-                        controller: name,
+                        controller: address,
+                        onFieldSubmitted: (value) => setState(() {
+                          name.text = value;
+                        }),
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                             label: Text('Address'),
@@ -118,8 +153,8 @@ class _AddMenuState extends State<AddMenu> {
                       margin: EdgeInsets.only(top: 5),
                       padding: EdgeInsets.all(10),
                       child: TextFormField(
-                        keyboardType: TextInputType.multiline,
-                        controller: name,
+                        keyboardType: TextInputType.url,
+                        controller: location,
                         textInputAction: TextInputAction.done,
                         decoration: InputDecoration(
                             helperText: 'Google map link(optional)',
