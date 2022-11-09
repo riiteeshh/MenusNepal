@@ -136,8 +136,8 @@ class _AddMenuState extends State<AddMenu> {
                       child: TextFormField(
                         keyboardType: TextInputType.multiline,
                         controller: address,
-                        onFieldSubmitted: (value) => setState(() {
-                          name.text = value;
+                        onFieldSubmitted: (value1) => setState(() {
+                          address.text = value1;
                         }),
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
