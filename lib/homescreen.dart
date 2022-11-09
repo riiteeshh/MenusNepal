@@ -60,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Radius.circular(5),
                     ),
                   ),
+                  focusColor: Colors.white,
                   enabledBorder: OutlineInputBorder(
                     borderSide: (BorderSide(
                         width: 1.0, color: Colors.yellow.withOpacity(0.4))),
