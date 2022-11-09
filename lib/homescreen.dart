@@ -10,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final searchfield = TextEditingController();
-  List<NewMenu> newmenu = [
+  static List<NewMenu> newmenu = [
     NewMenu(
         name: 'ChickenStation',
         location: 'Kathmandu,Nepal',
@@ -41,6 +41,16 @@ class _HomeScreenState extends State<HomeScreen> {
         logo:
             'https://play-lh.googleusercontent.com/hlx7U2aHkexuQbIV1Xz3en_bW-p3HLVnlDN8K7Anyfv9ZQhCC27EO8vaq04s_z-r6vxT'),
   ];
+  List<NewMenu> display_list = List.from(newmenu);
+  void updatelist(String value) {
+    setState(() {
+      display_list = newmenu
+          .where((element) =>
+              element.name!.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -51,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
             height: MediaQuery.of(context).size.height * 0.05,
             child: TextField(
               keyboardType: TextInputType.text,
-              controller: searchfield,
+              onChanged: (value) => updatelist(value),
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
                   hintText: 'Search the Restaurants',
@@ -101,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisCount: 2,
               childAspectRatio: 0.545,
             ),
-            itemCount: newmenu.length,
+            itemCount: display_list.length,
             itemBuilder: ((context, index) {
               return Container(
                 width: double.infinity,
@@ -130,13 +140,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: double.infinity,
                         alignment: Alignment.topCenter,
                         height: MediaQuery.of(context).size.height * 0.17,
-                        child: Image.network(newmenu[index].logo),
+                        child: Image.network(display_list[index].logo),
                       ),
                       Container(
                         padding: EdgeInsets.only(top: 15, left: 10, right: 10),
                         width: double.infinity,
                         child: Text(
-                          newmenu[index].name,
+                          display_list[index].name,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 18,
@@ -148,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: double.infinity,
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          newmenu[index].location,
+                          display_list[index].location,
                           style: TextStyle(fontStyle: FontStyle.italic),
                           textAlign: TextAlign.center,
                         ),
