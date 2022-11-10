@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class AddMenu extends StatefulWidget {
   const AddMenu({super.key});
@@ -12,10 +14,12 @@ class AddMenu extends StatefulWidget {
 }
 
 class _AddMenuState extends State<AddMenu> {
+  final DatabaseReference dbref = FirebaseDatabase.instance.ref().child('Data');
   final name = TextEditingController();
   final address = TextEditingController();
   final location = TextEditingController();
   File? image;
+
   Future pickimage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
@@ -170,7 +174,7 @@ class _AddMenuState extends State<AddMenu> {
                       width: MediaQuery.of(context).size.width * 0.5,
                       height: MediaQuery.of(context).size.height * 0.075,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: submit,
                         child: Text(
                           'Submit',
                           style: TextStyle(
@@ -205,15 +209,31 @@ class _AddMenuState extends State<AddMenu> {
               ListTile(
                 leading: Icon(Icons.camera_alt_rounded),
                 title: Text('Camera'),
-                onTap: () => pickimage(ImageSource.camera),
+                onTap: () {
+                  pickimage(ImageSource.camera);
+                  Navigator.pop(context);
+                },
               ),
               ListTile(
                 leading: Icon(Icons.image_rounded),
                 title: Text('Gallery'),
-                onTap: () => pickimage(ImageSource.gallery),
+                onTap: () {
+                  pickimage(ImageSource.gallery);
+                  Navigator.pop(context);
+                },
               ),
             ],
           );
         }));
+  }
+
+  void submit() {
+    Map<String, String> data = {
+      'name': name.text,
+      'address': address.text,
+      'location': location.text,
+      'logo': image!.path
+    };
+    dbref.push().set(data);
   }
 }

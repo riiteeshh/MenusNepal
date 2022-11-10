@@ -1,7 +1,7 @@
 class NewMenu {
   final String name;
   final String location;
-  late final bool fav;
+  late bool fav;
   final String logo;
 
   NewMenu(

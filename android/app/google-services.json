@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "753257162316",
+    "project_id": "menunepal-5d378",
+    "storage_bucket": "menunepal-5d378.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753257162316:android:b17b95da3b5e5d3b52f6e9",
+        "android_client_info": {
+          "package_name": "com.example.menunepal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "753257162316-ao4qbgf2q5phntjljn7thr0lpadv2vj6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCU97z6E0-xmP-AENvdl9k2OO_2U0BQpCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "753257162316-ao4qbgf2q5phntjljn7thr0lpadv2vj6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

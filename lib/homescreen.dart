@@ -41,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
         logo:
             'https://play-lh.googleusercontent.com/hlx7U2aHkexuQbIV1Xz3en_bW-p3HLVnlDN8K7Anyfv9ZQhCC27EO8vaq04s_z-r6vxT'),
   ];
+
   List<NewMenu> display_list = List.from(newmenu);
   void updatelist(String value) {
     setState(() {
@@ -113,57 +114,66 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             itemCount: display_list.length,
             itemBuilder: ((context, index) {
-              return Container(
-                width: double.infinity,
-                margin: EdgeInsets.all(5),
-                child: Card(
-                  elevation: 10,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
+              return InkWell(
+                enableFeedback: false,
+                onTap: () => print(index),
+                splashColor: Colors.redAccent,
+                child: Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.all(5),
+                  child: Card(
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                            width: double.infinity,
+                            alignment: Alignment.topRight,
+                            margin: EdgeInsets.all(7),
+                            child: IconButton(
+                              onPressed: () {
+                                chg(index);
+                              },
+                              icon: Icon(Icons.favorite_rounded),
+                              splashColor: display_list[index].fav
+                                  ? Colors.black.withOpacity(0.2)
+                                  : Colors.red,
+                              color: display_list[index].fav
+                                  ? Colors.red
+                                  : Colors.black.withOpacity(0.2),
+                            )),
+                        Container(
+                          margin: EdgeInsets.only(top: 5),
                           width: double.infinity,
-                          alignment: Alignment.topRight,
-                          margin: EdgeInsets.all(7),
-                          child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                print(newmenu[index].fav);
-                              });
-                            },
-                            icon: Icon(Icons.favorite_rounded),
-                            color: Colors.black.withOpacity(0.2),
-                          )),
-                      Container(
-                        margin: EdgeInsets.only(top: 5),
-                        width: double.infinity,
-                        alignment: Alignment.topCenter,
-                        height: MediaQuery.of(context).size.height * 0.17,
-                        child: Image.network(display_list[index].logo),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 15, left: 10, right: 10),
-                        width: double.infinity,
-                        child: Text(
-                          display_list[index].name,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'SecularOne',
-                              fontWeight: FontWeight.bold),
+                          alignment: Alignment.topCenter,
+                          height: MediaQuery.of(context).size.height * 0.17,
+                          child: Image.network(display_list[index].logo),
                         ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(5),
-                        child: Text(
-                          display_list[index].location,
-                          style: TextStyle(fontStyle: FontStyle.italic),
-                          textAlign: TextAlign.center,
+                        Container(
+                          padding:
+                              EdgeInsets.only(top: 15, left: 10, right: 10),
+                          width: double.infinity,
+                          child: Text(
+                            display_list[index].name,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'SecularOne',
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      )
-                    ],
+                        Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(5),
+                          child: Text(
+                            display_list[index].location,
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -172,5 +182,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void chg(int index) {
+    setState(() {
+      newmenu[index].fav = !newmenu[index].fav;
+      print(newmenu[index].fav);
+      print(index);
+    });
   }
 }
