@@ -14,7 +14,6 @@ class AddMenu extends StatefulWidget {
 }
 
 class _AddMenuState extends State<AddMenu> {
-  final DatabaseReference dbref = FirebaseDatabase.instance.ref().child('Data');
   final name = TextEditingController();
   final address = TextEditingController();
   final location = TextEditingController();
@@ -256,14 +255,12 @@ class _AddMenuState extends State<AddMenu> {
   }
 
   void submit() {
-    // Map<String, String> data = {
-    //   'name': name.text,
-    //   'address': address.text,
-    //   'location': location.text,
-    //   'logo': image!.path
-    // };
-    // dbref.push().set(data);
-    Navigator.pushNamed(context, '/addphoto');
+    Navigator.pushNamed(context, '/addphoto', arguments: {
+      'name': name.text,
+      'address': address.text,
+      'location': location.text,
+      'logo': image!.path
+    });
   }
 
   void clear() {

@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +13,15 @@ class AddPhoto extends StatefulWidget {
 }
 
 class _AddPhotoState extends State<AddPhoto> {
+  final DatabaseReference dbref =
+      FirebaseDatabase.instance.ref().child('SubmittedDetails');
+  final DatabaseReference dbref1 =
+      FirebaseDatabase.instance.ref().child('SubmittedMenus');
   File? image;
   bool check = false;
-  List photo = [];
+  List uploadmenuitem = [];
+
+  List showmenuitem = [];
   Future pickimage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
@@ -21,7 +29,10 @@ class _AddPhotoState extends State<AddPhoto> {
       final imagetemp = File(image.path);
       setState(() {
         this.image = imagetemp;
-        photo.add(imagetemp);
+        showmenuitem.add(imagetemp);
+        print(imagetemp);
+        uploadmenuitem.add(image.path);
+
         check = true;
       });
     } on PlatformException catch (e) {
@@ -31,14 +42,28 @@ class _AddPhotoState extends State<AddPhoto> {
 
   @override
   Widget build(BuildContext context) {
+    final arg = (ModalRoute.of(context)?.settings.arguments ??
+        <dynamic, dynamic>{}) as Map;
+    void done() {
+      Map<String, dynamic> data = {
+        'name': arg['name'],
+        'address': arg['address'],
+        'location': arg['location'],
+        'logo': arg['logo'],
+        // 'img': up,
+      };
+      dbref.push().set(data);
+      dbref1.push().set(uploadmenuitem);
+
+      Navigator.pushNamed(context, '/tabbar');
+    }
+
     return SafeArea(
       child: Scaffold(
         floatingActionButton: check
             ? FloatingActionButton.extended(
                 splashColor: Colors.yellow,
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/tabbar');
-                },
+                onPressed: done,
                 label: Text('Upload'),
                 icon: Icon(Icons.upload_rounded),
               )
@@ -67,7 +92,7 @@ class _AddPhotoState extends State<AddPhoto> {
                   ListView.builder(
                     physics: BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
-                    itemCount: photo.length,
+                    itemCount: uploadmenuitem.length,
                     addAutomaticKeepAlives: true,
                     itemBuilder: ((context, index) {
                       return Container(
@@ -80,7 +105,7 @@ class _AddPhotoState extends State<AddPhoto> {
                                 borderRadius: BorderRadius.circular(20)),
                             child: SizedBox(
                               child: Image.file(
-                                photo[index],
+                                uploadmenuitem[index],
                                 width: MediaQuery.of(context).size.width * 1,
                                 height: MediaQuery.of(context).size.height * 1,
                               ),
@@ -116,8 +141,6 @@ class _AddPhotoState extends State<AddPhoto> {
       ),
     );
   }
-
-  void done() {}
 
   void add() {
     showModalBottomSheet(
