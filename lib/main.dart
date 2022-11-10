@@ -3,8 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:menunepal/addmenu.dart';
+import 'package:menunepal/addphoto.dart';
 import 'package:menunepal/favourite.dart';
 import 'package:menunepal/homescreen.dart';
+import 'package:menunepal/menupage.dart';
 import 'package:menunepal/tabbar.dart';
 
 void main() async {
@@ -25,7 +27,9 @@ class MyApp extends StatelessWidget {
         '/tabbar': (context) => TabScreen(),
         '/homescreen': (context) => HomeScreen(),
         '/favourite': (context) => Favourite(),
-        '/addmenu': (context) => AddMenu()
+        '/addmenu': (context) => AddMenu(),
+        '/addphoto': (context) => AddPhoto(),
+        '/menupage': (context) => MenuPage(),
       },
     );
   }

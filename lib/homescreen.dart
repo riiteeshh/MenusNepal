@@ -116,7 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
             itemBuilder: ((context, index) {
               return InkWell(
                 enableFeedback: false,
-                onTap: () => print(index),
+                onTap: () => Navigator.pushNamed(context, '/menupage',
+                    arguments: {'index': index.toString()}),
                 splashColor: Colors.redAccent,
                 child: Container(
                   width: double.infinity,

@@ -169,26 +169,54 @@ class _AddMenuState extends State<AddMenu> {
                                 borderRadius: BorderRadius.circular(10))),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10, left: 10),
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.075,
-                      child: ElevatedButton(
-                        onPressed: submit,
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: 'DelaGothic'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 10, left: 15),
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: MediaQuery.of(context).size.height * 0.075,
+                          child: ElevatedButton.icon(
+                            onPressed: clear,
+                            icon: Icon(Icons.clear),
+                            label: Text(
+                              'ClearAll',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontFamily: 'DelaGothic'),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                enableFeedback: false,
+                                elevation: 20,
+                                backgroundColor: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15))),
+                          ),
                         ),
-                        style: ElevatedButton.styleFrom(
-                            enableFeedback: false,
-                            elevation: 20,
-                            backgroundColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15))),
-                      ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10, right: 15),
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: MediaQuery.of(context).size.height * 0.075,
+                          child: ElevatedButton.icon(
+                            onPressed: submit,
+                            icon: Icon(Icons.add_a_photo_rounded),
+                            label: Text(
+                              'AddPhoto',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontFamily: 'DelaGothic'),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                enableFeedback: false,
+                                elevation: 20,
+                                backgroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15))),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -228,12 +256,22 @@ class _AddMenuState extends State<AddMenu> {
   }
 
   void submit() {
-    Map<String, String> data = {
-      'name': name.text,
-      'address': address.text,
-      'location': location.text,
-      'logo': image!.path
-    };
-    dbref.push().set(data);
+    // Map<String, String> data = {
+    //   'name': name.text,
+    //   'address': address.text,
+    //   'location': location.text,
+    //   'logo': image!.path
+    // };
+    // dbref.push().set(data);
+    Navigator.pushNamed(context, '/addphoto');
+  }
+
+  void clear() {
+    setState(() {
+      name.clear();
+      address.clear();
+      location.clear();
+      image = null;
+    });
   }
 }
