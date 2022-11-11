@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +16,10 @@ class AddPhoto extends StatefulWidget {
 class _AddPhotoState extends State<AddPhoto> {
   final DatabaseReference dbref =
       FirebaseDatabase.instance.ref().child('SubmittedDetails');
-  final DatabaseReference dbref1 =
-      FirebaseDatabase.instance.ref().child('SubmittedMenus');
+  final dbid = FirebaseFirestore.instance.collection('SubmittedDetails').doc();
+
+  // final DatabaseReference dbref1 =
+  //     FirebaseDatabase.instance.ref().child('SubmittedMenus');
   File? image;
   bool check = false;
   List uploadmenuitem = [];
@@ -46,16 +49,17 @@ class _AddPhotoState extends State<AddPhoto> {
         <dynamic, dynamic>{}) as Map;
     void done() {
       Map<String, dynamic> data = {
+        'id': dbid.id,
         'name': arg['name'],
         'address': arg['address'],
         'location': arg['location'],
         'logo': arg['logo'],
-        // 'img': up,
+        'menuimages': uploadmenuitem,
       };
       dbref.push().set(data);
-      dbref1.push().set(uploadmenuitem);
+      // dbref1.push().set(uploadmenuitem);
 
-      Navigator.pushNamed(context, '/tabbar');
+      // Navigator.pushNamed(context, '/tabbar');
     }
 
     return SafeArea(
@@ -92,7 +96,7 @@ class _AddPhotoState extends State<AddPhoto> {
                   ListView.builder(
                     physics: BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
-                    itemCount: uploadmenuitem.length,
+                    itemCount: showmenuitem.length,
                     addAutomaticKeepAlives: true,
                     itemBuilder: ((context, index) {
                       return Container(
@@ -105,7 +109,7 @@ class _AddPhotoState extends State<AddPhoto> {
                                 borderRadius: BorderRadius.circular(20)),
                             child: SizedBox(
                               child: Image.file(
-                                uploadmenuitem[index],
+                                showmenuitem[index],
                                 width: MediaQuery.of(context).size.width * 1,
                                 height: MediaQuery.of(context).size.height * 1,
                               ),

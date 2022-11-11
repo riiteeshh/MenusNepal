@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:menunepal/newmenu.dart';
 
@@ -10,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final searchfield = TextEditingController();
+
   static List<NewMenu> newmenu = [
     NewMenu(
         name: 'ChickenStation',
@@ -41,6 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
         logo:
             'https://play-lh.googleusercontent.com/hlx7U2aHkexuQbIV1Xz3en_bW-p3HLVnlDN8K7Anyfv9ZQhCC27EO8vaq04s_z-r6vxT'),
   ];
+
+  void datas(String name, String location, bool fav, String logo) {
+    final newm = NewMenu(name: name, location: location, fav: fav, logo: logo);
+
+    setState(() {
+      newmenu.add(newm);
+    });
+  }
 
   List<NewMenu> display_list = List.from(newmenu);
   void updatelist(String value) {
