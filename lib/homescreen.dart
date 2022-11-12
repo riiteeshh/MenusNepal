@@ -1,4 +1,4 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:menunepal/newmenu.dart';
 
@@ -11,6 +11,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final searchfield = TextEditingController();
+  var document = FirebaseFirestore.instance
+      .collection('SubmittedDetails')
+      .doc()
+      .snapshots();
 
   static List<NewMenu> newmenu = [
     NewMenu(
@@ -48,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final newm = NewMenu(name: name, location: location, fav: fav, logo: logo);
 
     setState(() {
+      print('called');
       newmenu.add(newm);
     });
   }
@@ -60,6 +65,18 @@ class _HomeScreenState extends State<HomeScreen> {
               element.name.toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
+  }
+
+  Future getdoc() async {
+    await FirebaseFirestore.instance
+        .collection('SubmittedDetails')
+        .get()
+        .then((snapshot) => snapshot.docs.forEach((element) {
+              datas(element.data()['name'], element.data()['address'], false,
+                  element.data()['logo']);
+
+              //print(element.data().values);
+            }));
   }
 
   @override

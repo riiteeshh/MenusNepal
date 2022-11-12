@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,8 +14,7 @@ class AddPhoto extends StatefulWidget {
 }
 
 class _AddPhotoState extends State<AddPhoto> {
-  final DatabaseReference dbref =
-      FirebaseDatabase.instance.ref().child('SubmittedDetails');
+  final dbref = FirebaseFirestore.instance.collection('SubmittedDetails');
   final dbid = FirebaseFirestore.instance.collection('SubmittedDetails').doc();
 
   // final DatabaseReference dbref1 =
@@ -49,17 +48,17 @@ class _AddPhotoState extends State<AddPhoto> {
         <dynamic, dynamic>{}) as Map;
     void done() {
       Map<String, dynamic> data = {
-        'id': dbid.id,
+        'id': dbid.id.toString(),
         'name': arg['name'],
         'address': arg['address'],
         'location': arg['location'],
         'logo': arg['logo'],
         'menuimages': uploadmenuitem,
       };
-      dbref.push().set(data);
+      dbref.add(data);
       // dbref1.push().set(uploadmenuitem);
 
-      // Navigator.pushNamed(context, '/tabbar');
+      Navigator.pushNamed(context, '/tabbar');
     }
 
     return SafeArea(
