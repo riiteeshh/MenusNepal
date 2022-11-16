@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,10 +17,13 @@ class _AddPhotoState extends State<AddPhoto> {
   final dbref = FirebaseFirestore.instance.collection('SubmittedDetails');
   final dbid = FirebaseFirestore.instance.collection('SubmittedDetails').doc();
 
-  // final DatabaseReference dbref1 =
-  //     FirebaseDatabase.instance.ref().child('SubmittedMenus');
   File? image;
+  UploadTask? uploadTask;
+  UploadTask? uploadTaskmenu;
   bool check = false;
+  bool load = false;
+  String logourl = '';
+  List uploadmenuitemurl = [];
   List uploadmenuitem = [];
 
   List showmenuitem = [];
@@ -46,16 +49,41 @@ class _AddPhotoState extends State<AddPhoto> {
   Widget build(BuildContext context) {
     final arg = (ModalRoute.of(context)?.settings.arguments ??
         <dynamic, dynamic>{}) as Map;
-    void done() {
+    Future<void> done() async {
+      setState(() {
+        load = !load;
+      });
+
+      final path = 'logos/' + arg['logo'];
+      final file = File(arg['logo']);
+      final ref = FirebaseStorage.instance.ref().child(path);
+      uploadTask = ref.putFile(file);
+      final snapshot = await uploadTask!.whenComplete(() {});
+
+      final urldownload = await snapshot.ref.getDownloadURL();
+
+      for (int i = 0; i <= uploadmenuitem.length - 1; i++) {
+        final paths = 'menuitem/' + uploadmenuitem[i];
+        final files = File(uploadmenuitem[i]);
+        final refs = FirebaseStorage.instance.ref().child(paths);
+        uploadTaskmenu = refs.putFile(files);
+        final snapshots = await uploadTaskmenu!.whenComplete(() => {});
+        final menuurl = await snapshots.ref.getDownloadURL();
+        uploadmenuitemurl.add(menuurl);
+      }
+      print(uploadmenuitemurl.length);
       Map<String, dynamic> data = {
         'id': dbid.id.toString(),
         'name': arg['name'],
         'address': arg['address'],
         'location': arg['location'],
-        'logo': arg['logo'],
-        'menuimages': uploadmenuitem,
+        'logo': urldownload,
+        'menuimages': uploadmenuitemurl,
       };
-      dbref.add(data);
+      await dbref.add(data);
+      setState(() {
+        load = !load;
+      });
       // dbref1.push().set(uploadmenuitem);
 
       Navigator.pushNamed(context, '/tabbar');
@@ -67,8 +95,13 @@ class _AddPhotoState extends State<AddPhoto> {
             ? FloatingActionButton.extended(
                 splashColor: Colors.yellow,
                 onPressed: done,
-                label: Text('Upload'),
-                icon: Icon(Icons.upload_rounded),
+                label: load
+                    ? CircularProgressIndicator(
+                        backgroundColor: Colors.blue,
+                        color: Colors.white,
+                      )
+                    : Text('Upload'),
+                icon: load ? null : Icon(Icons.upload_rounded),
               )
             : null,
         appBar: check
@@ -125,20 +158,25 @@ class _AddPhotoState extends State<AddPhoto> {
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.5,
                       height: MediaQuery.of(context).size.height * 0.075,
-                      child: ElevatedButton.icon(
-                          onPressed: add,
-                          style: ElevatedButton.styleFrom(
-                              enableFeedback: false,
-                              elevation: 20,
-                              backgroundColor: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15))),
-                          icon: Icon(Icons.add_a_photo_rounded),
-                          label: Text(
-                            'AddPhoto',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          )),
+                      child: load
+                          ? CircularProgressIndicator(
+                              color: Colors.white,
+                              backgroundColor: Colors.blue,
+                            )
+                          : ElevatedButton.icon(
+                              onPressed: add,
+                              style: ElevatedButton.styleFrom(
+                                  enableFeedback: false,
+                                  elevation: 20,
+                                  backgroundColor: Colors.green,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15))),
+                              icon: Icon(Icons.add_a_photo_rounded),
+                              label: Text(
+                                'AddPhoto',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              )),
                     )),
               ),
       ),

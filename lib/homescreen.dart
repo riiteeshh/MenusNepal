@@ -11,73 +11,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final searchfield = TextEditingController();
-  var document = FirebaseFirestore.instance
-      .collection('SubmittedDetails')
-      .doc()
-      .snapshots();
+  String search = '';
 
-  static List<NewMenu> newmenu = [
-    NewMenu(
-        name: 'ChickenStation',
-        location: 'Kathmandu,Nepal',
-        fav: false,
-        logo:
-            'https://images.foodmandu.com//Images/Vendor/1277/OriginalSize/WhatsApp_Image_2021-12-06_at_12_061221064914.09.22.jpeg'),
-    NewMenu(
-        name: 'The Burger House And The Crunchy Corner',
-        location: 'Lalitpur,Nepal',
-        fav: false,
-        logo:
-            'https://media-cdn.tripadvisor.com/media/photo-s/11/44/e8/e9/the-burger-house-and.jpg'),
-    NewMenu(
-        name: 'KFC Nepal',
-        location: 'Thapathali,Nepal',
-        fav: false,
-        logo:
-            'https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png'),
-    NewMenu(
-        name: 'Michael Grills',
-        location: 'Mid-Baneshwor,Nepal',
-        fav: false,
-        logo: 'https://menu.nepvent.com/storage/logo/michaelgrills.jpg'),
-    NewMenu(
-        name: 'KKFC Nepal',
-        location: 'Sundhara,Nepal',
-        fav: false,
-        logo:
-            'https://play-lh.googleusercontent.com/hlx7U2aHkexuQbIV1Xz3en_bW-p3HLVnlDN8K7Anyfv9ZQhCC27EO8vaq04s_z-r6vxT'),
-  ];
-
-  void datas(String name, String location, bool fav, String logo) {
-    final newm = NewMenu(name: name, location: location, fav: fav, logo: logo);
-
-    setState(() {
-      print('called');
-      newmenu.add(newm);
-    });
-  }
-
-  List<NewMenu> display_list = List.from(newmenu);
-  void updatelist(String value) {
-    setState(() {
-      display_list = newmenu
-          .where((element) =>
-              element.name.toLowerCase().contains(value.toLowerCase()))
-          .toList();
-    });
-  }
-
-  Future getdoc() async {
-    await FirebaseFirestore.instance
-        .collection('SubmittedDetails')
-        .get()
-        .then((snapshot) => snapshot.docs.forEach((element) {
-              datas(element.data()['name'], element.data()['address'], false,
-                  element.data()['logo']);
-
-              //print(element.data().values);
-            }));
-  }
+  var document = FirebaseFirestore.instance.collection('SubmittedDetails');
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +24,15 @@ class _HomeScreenState extends State<HomeScreen> {
             margin: EdgeInsets.only(top: 10, left: 10, right: 10),
             height: MediaQuery.of(context).size.height * 0.05,
             child: TextField(
+              controller: searchfield,
               keyboardType: TextInputType.text,
-              onChanged: (value) => updatelist(value),
               textInputAction: TextInputAction.search,
+              onSubmitted: ((value) {
+                setState(() {
+                  searchfield.text = value;
+                  search = searchfield.text;
+                });
+              }),
               decoration: InputDecoration(
                   hintText: 'Search the Restaurants',
                   border: OutlineInputBorder(
@@ -113,7 +55,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   suffixIcon: IconButton(
-                      onPressed: () {}, icon: Icon(Icons.search_rounded))),
+                      onPressed: () {
+                        setState(() {
+                          search = searchfield.text;
+                          print(search);
+                        });
+                      },
+                      icon: Icon(Icons.search_rounded))),
             ),
           ),
           backgroundColor: Colors.yellow.withOpacity(0.1),
@@ -133,90 +81,101 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: Container(
           width: double.infinity,
-          child: GridView.builder(
-            scrollDirection: Axis.vertical,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.545,
-            ),
-            itemCount: display_list.length,
-            itemBuilder: ((context, index) {
-              return InkWell(
-                enableFeedback: false,
-                onTap: () => Navigator.pushNamed(context, '/menupage',
-                    arguments: {'index': index.toString()}),
-                splashColor: Colors.redAccent,
-                child: Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.all(5),
-                  child: Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                            width: double.infinity,
-                            alignment: Alignment.topRight,
-                            margin: EdgeInsets.all(7),
-                            child: IconButton(
-                              onPressed: () {
-                                chg(index);
-                              },
-                              icon: Icon(Icons.favorite_rounded),
-                              splashColor: display_list[index].fav
-                                  ? Colors.black.withOpacity(0.2)
-                                  : Colors.red,
-                              color: display_list[index].fav
-                                  ? Colors.red
-                                  : Colors.black.withOpacity(0.2),
-                            )),
-                        Container(
-                          margin: EdgeInsets.only(top: 5),
-                          width: double.infinity,
-                          alignment: Alignment.topCenter,
-                          height: MediaQuery.of(context).size.height * 0.17,
-                          child: Image.network(display_list[index].logo),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.only(top: 15, left: 10, right: 10),
-                          width: double.infinity,
-                          child: Text(
-                            display_list[index].name,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'SecularOne',
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(5),
-                          child: Text(
-                            display_list[index].location,
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      ],
+          child: StreamBuilder<QuerySnapshot>(
+              stream: (search.isNotEmpty)
+                  ? document
+                      .where("name", isEqualTo: search.toUpperCase())
+                      .snapshots()
+                  : document.snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting)
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                else
+                  return GridView.builder(
+                    scrollDirection: Axis.vertical,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.545,
                     ),
-                  ),
-                ),
-              );
-            }),
-          ),
+                    itemCount: snapshot.data?.docs.length,
+                    itemBuilder: ((context, index) {
+                      DocumentSnapshot documentSnapshot =
+                          snapshot.data!.docs[index];
+
+                      return InkWell(
+                        enableFeedback: false,
+                        onTap: () => Navigator.pushNamed(context, '/menupage',
+                            arguments: {'index': index.toString()}),
+                        splashColor: Colors.redAccent,
+                        child: Container(
+                          width: double.infinity,
+                          margin: EdgeInsets.all(5),
+                          child: Card(
+                            elevation: 10,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  width: double.infinity,
+                                  alignment: Alignment.topRight,
+                                  margin: EdgeInsets.all(7),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      setState(() {});
+                                    },
+                                    icon: Icon(
+                                      Icons.place_rounded,
+                                      size: 26,
+                                    ),
+                                    splashColor: Colors.red,
+                                    color: Colors.black.withOpacity(0.2),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 5),
+                                  width: double.infinity,
+                                  alignment: Alignment.topCenter,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.17,
+                                  child:
+                                      Image.network(documentSnapshot['logo']),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      top: 15, left: 10, right: 10),
+                                  width: double.infinity,
+                                  child: Text(
+                                    documentSnapshot['name'],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: 'SecularOne',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Container(
+                                  width: double.infinity,
+                                  padding: EdgeInsets.all(5),
+                                  child: Text(
+                                    documentSnapshot['address'],
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  );
+              }),
         ),
       ),
     );
-  }
-
-  void chg(int index) {
-    setState(() {
-      newmenu[index].fav = !newmenu[index].fav;
-      print(newmenu[index].fav);
-      print(index);
-    });
   }
 }

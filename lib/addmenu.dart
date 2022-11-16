@@ -40,7 +40,7 @@ class _AddMenuState extends State<AddMenu> {
           children: [
             Expanded(
               child: Container(
-                width: 160,
+                width: 180,
                 child: Card(
                   elevation: 10,
                   shape: RoundedRectangleBorder(
@@ -53,11 +53,12 @@ class _AddMenuState extends State<AddMenu> {
                           margin: EdgeInsets.only(top: 5),
                           width: double.infinity,
                           alignment: Alignment.topCenter,
-                          height: MediaQuery.of(context).size.height * 0.17,
+                          height: MediaQuery.of(context).size.height * 0.22,
                           child: image != null
                               ? Image.file(
                                   image!,
-                                  fit: BoxFit.contain,
+                                  width: double.infinity,
+                                  height: double.infinity,
                                 )
                               : Image.network(
                                   'https://images.cdn2.stockunlimited.net/preview1300/restaurant-logo-design_1797600.jpg',
@@ -255,9 +256,9 @@ class _AddMenuState extends State<AddMenu> {
 
   void submit() {
     Navigator.pushNamed(context, '/addphoto', arguments: {
-      'name': name.text,
-      'address': address.text,
-      'location': location.text,
+      'name': name.text.toUpperCase(),
+      'address': address.text.toUpperCase(),
+      'location': location.text.toUpperCase(),
       'logo': image!.path
     });
   }
