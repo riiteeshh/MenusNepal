@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final searchfield = TextEditingController();
   String search = '';
+  // List menu = [];
 
   var document = FirebaseFirestore.instance.collection('SubmittedDetails');
 
@@ -67,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.yellow.withOpacity(0.1),
           elevation: 0,
         ),
-        backgroundColor: Colors.yellow.withOpacity(0.4),
+        backgroundColor: Color(0xffFFFF8F),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             Navigator.pushNamed(context, '/addmenu');
@@ -107,7 +108,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       return InkWell(
                         enableFeedback: false,
                         onTap: () => Navigator.pushNamed(context, '/menupage',
-                            arguments: {'index': index.toString()}),
+                            arguments: {
+                              'path': documentSnapshot.id,
+                              'index': index.toString(),
+                              'location': documentSnapshot['location']
+                            }),
                         splashColor: Colors.redAccent,
                         child: Container(
                           width: double.infinity,

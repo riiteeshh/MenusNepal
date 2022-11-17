@@ -15,7 +15,6 @@ class AddPhoto extends StatefulWidget {
 
 class _AddPhotoState extends State<AddPhoto> {
   final dbref = FirebaseFirestore.instance.collection('SubmittedDetails');
-  final dbid = FirebaseFirestore.instance.collection('SubmittedDetails').doc();
 
   File? image;
   UploadTask? uploadTask;
@@ -73,7 +72,6 @@ class _AddPhotoState extends State<AddPhoto> {
       }
       print(uploadmenuitemurl.length);
       Map<String, dynamic> data = {
-        'id': dbid.id.toString(),
         'name': arg['name'],
         'address': arg['address'],
         'location': arg['location'],
@@ -84,9 +82,8 @@ class _AddPhotoState extends State<AddPhoto> {
       setState(() {
         load = !load;
       });
-      // dbref1.push().set(uploadmenuitem);
 
-      Navigator.pushNamed(context, '/tabbar');
+      Navigator.pushNamed(context, '/homescreen');
     }
 
     return SafeArea(
