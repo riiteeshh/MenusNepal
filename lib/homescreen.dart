@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:menunepal/newmenu.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -110,7 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () => Navigator.pushNamed(context, '/menupage',
                             arguments: {
                               'path': documentSnapshot.id,
-                              'index': index.toString(),
                               'location': documentSnapshot['location']
                             }),
                         splashColor: Colors.redAccent,
@@ -127,17 +126,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width: double.infinity,
                                   alignment: Alignment.topRight,
                                   margin: EdgeInsets.all(7),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      setState(() {});
-                                    },
-                                    icon: Icon(
-                                      Icons.place_rounded,
-                                      size: 26,
-                                    ),
-                                    splashColor: Colors.red,
-                                    color: Colors.black.withOpacity(0.2),
-                                  ),
+                                  child: (documentSnapshot['location'] != null)
+                                      ? IconButton(
+                                          onPressed: () {
+                                            final Uri url = Uri.parse(
+                                                documentSnapshot['location']);
+                                            launchUrl(url);
+                                          },
+                                          icon: Icon(
+                                            Icons.place_rounded,
+                                            size: 26,
+                                          ),
+                                          splashColor: Colors.blue,
+                                          color: Colors.blue.withOpacity(0.8),
+                                        )
+                                      : IconButton(
+                                          onPressed: () {
+                                            setState(() {});
+                                          },
+                                          icon: Icon(
+                                            Icons.place_rounded,
+                                            size: 26,
+                                          ),
+                                          splashColor: Colors.red,
+                                          color: Colors.black.withOpacity(0.2),
+                                        ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(top: 5),

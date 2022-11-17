@@ -83,7 +83,7 @@ class _AddPhotoState extends State<AddPhoto> {
         load = !load;
       });
 
-      Navigator.pushNamed(context, '/homescreen');
+      Navigator.pushReplacementNamed(context, '/homescreen');
     }
 
     return SafeArea(

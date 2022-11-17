@@ -258,7 +258,7 @@ class _AddMenuState extends State<AddMenu> {
     Navigator.pushNamed(context, '/addphoto', arguments: {
       'name': name.text.toUpperCase(),
       'address': address.text.toUpperCase(),
-      'location': location.text.toUpperCase(),
+      'location': location.text,
       'logo': image!.path
     });
   }

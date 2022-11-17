@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -16,7 +17,6 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     final arg = (ModalRoute.of(context)?.settings.arguments ??
         <dynamic, dynamic>{}) as Map;
-    final data = arg['id'];
 
     List menuitem = [];
     Future<void> fireData() async {
@@ -26,11 +26,16 @@ class _MenuPageState extends State<MenuPage> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        foregroundColor: Colors.blueGrey,
+        elevation: 0,
+        backgroundColor: Colors.yellow.withOpacity(0.4),
+      ),
       floatingActionButton: (arg['location'] != null)
           ? FloatingActionButton.extended(
               onPressed: () {
-                print(arg['path']);
-                fireData();
+                final Uri url = Uri.parse(arg['location']);
+                launchUrl(url);
               },
               label: Text('Get direction'),
               backgroundColor: Colors.blue,
