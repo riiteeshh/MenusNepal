@@ -133,12 +133,14 @@ class _AddPhotoState extends State<AddPhoto> {
                         width: MediaQuery.of(context).size.width * 1,
                         height: MediaQuery.of(context).size.height * 1,
                         child: Card(
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
                             color: Colors.white.withOpacity(1),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
                             child: SizedBox(
                               child: Image.file(
                                 showmenuitem[index],
+                                fit: BoxFit.fill,
                                 width: MediaQuery.of(context).size.width * 1,
                                 height: MediaQuery.of(context).size.height * 1,
                               ),

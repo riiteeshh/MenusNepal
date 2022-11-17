@@ -60,9 +60,12 @@ class _AddMenuState extends State<AddMenu> {
                                   width: double.infinity,
                                   height: double.infinity,
                                 )
-                              : Image.network(
-                                  'https://images.cdn2.stockunlimited.net/preview1300/restaurant-logo-design_1797600.jpg',
-                                ),
+                              : Center(
+                                  child: Icon(
+                                  Icons.add_a_photo_rounded,
+                                  size: 100,
+                                  color: Colors.blue,
+                                )),
                         ),
                       ),
                       Container(

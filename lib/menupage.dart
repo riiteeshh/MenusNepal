@@ -65,12 +65,15 @@ class _MenuPageState extends State<MenuPage> {
                     width: MediaQuery.of(context).size.width * 1,
                     height: MediaQuery.of(context).size.height * 1,
                     child: Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
                         color: Colors.white.withOpacity(1),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         child: SizedBox(
                           child: Image.network(
                             menuitem[index],
+                            fit: BoxFit.fill,
+                            isAntiAlias: true,
                             width: MediaQuery.of(context).size.width * 1,
                             height: MediaQuery.of(context).size.height * 1,
                           ),
