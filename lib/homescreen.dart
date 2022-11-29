@@ -12,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final searchfield = TextEditingController();
   String search = '';
-  // List menu = [];
 
   var document = FirebaseFirestore.instance.collection('SubmittedDetails');
 
@@ -59,7 +58,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {
                         setState(() {
                           search = searchfield.text;
-                          print(search);
                         });
                       },
                       icon: Icon(Icons.search_rounded))),

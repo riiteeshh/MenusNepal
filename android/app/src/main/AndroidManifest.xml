@@ -2,8 +2,10 @@
     package="com.example.menunepal">
     <uses-feature android:name="android.hardware.camera"/>    
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
    <application
-        android:label="menunepal"
+        android:label="MenusNepal"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
